@@ -10,3 +10,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@layer utilities {
+  .messages-list li {
+    @apply block text-white rounded p-2 mb-1 w-2/5 clear-both
+  }
+  .sent-message {
+    @apply bg-green-500 float-right
+  }
+  .received-message {
+    @apply bg-purple-500
+  }
+  .new-message-input-field {
+    @apply block border-t-2 border-b-2 w-full mb-2
+  }
+}
