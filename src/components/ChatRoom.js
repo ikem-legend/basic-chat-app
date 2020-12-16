@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import {useParams} from "react-router-dom"
 import useChat from "../hooks/useChat"
 
-const ChatRoom = () => {
+const ChatRoom = ({chats}) => {
   const {roomId} = useParams();
   const messageList = [
     {ownedByCurrentUser: true, body: 'Hi'},
@@ -39,6 +39,9 @@ const ChatRoom = () => {
             >
               {message.body}
             </li>
+          ))}
+          {chats.map((chatDetail, i) => (
+            <p key={chatDetail.timestamp}>{chatDetail.content}</p>
           ))}
         </ol>
         <textarea
