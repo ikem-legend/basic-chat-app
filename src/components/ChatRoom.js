@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {useForm} from "react-hook-form";
 import {auth, db} from "../services/firebase";
 
-const ChatRoom = ({chats, user, error, writeError}) => {
+const ChatRoom = () => {
   const chatData = {
     currentUser: auth().currentUser,
     users: [],
@@ -12,6 +12,7 @@ const ChatRoom = ({chats, user, error, writeError}) => {
     writeError: null
   }
   const [chatState, setChatState] = useState({...chatData})
+  const [recipient, setRecipient] = useState('')
   useEffect(() => {
     try {
       db.ref("messages").on("value", snapshot => {
@@ -38,18 +39,11 @@ const ChatRoom = ({chats, user, error, writeError}) => {
       setChatState({...chatState, readError: error.message});
     }
   }, [chatState])
-  const {getValues, register, reset, errors, handleSubmit} = useForm()
-  const messageList = [
-    {ownedByCurrentUser: true, body: 'Hi'},
-    {ownedByCurrentUser: true, body: 'How far'},
-    {ownedByCurrentUser: false, body: 'Heyy'},
-    {ownedByCurrentUser: true, body: 'Yo'},
-    {ownedByCurrentUser: false, body: 'You good?'},
-    {ownedByCurrentUser: true, body: 'What\'s up?'}
-  ]
-  // const {messages, sendMessage} = useChat(roomId);
-  // const [messages, sendMessage] = useState(messageList);
-  // const [newMessage, setNewMessage] = useState('');
+  const {register, reset, errors, handleSubmit} = useForm()
+
+  const selectUser = (selectedUserName) => {
+    setRecipient(selectedUserName)
+  }
 
   const handleSendMessage = async () => {
     setChatState({...chatState, writeError: null});
@@ -58,7 +52,7 @@ const ChatRoom = ({chats, user, error, writeError}) => {
         content: chatState.content,
         timestamp: Date.now(),
         senderUid: chatState.user.uid,
-        receiverUid: ''
+        receiverUid: recipient
       })
       reset()
     } catch(err) {
@@ -68,21 +62,19 @@ const ChatRoom = ({chats, user, error, writeError}) => {
 
   return (
     <div className="m-auto w-3/5">
-      <h1 className="text-3xl font-bold text-center">User: </h1>
+      <h1 className="text-3xl font-bold text-center">User List</h1>
+      <div className="users-container w-full min-h-full p-2 border-2 border-gray-400 rounded">
+        <ol className="users-list">
+          {chatState.users.map((user, idx) => (
+            <li key={idx} onClick={() => selectUser(user.displayName)}>{user.displayName}</li>
+          ))}
+        </ol>
+      </div>
+      <h1 className="text-3xl font-bold text-center">User: {recipient}</h1>
       <div className="messages-container w-full min-h-full p-2 border-2 border-gray-400 rounded">
         <ol className="messages-list">
-          {/*messages.map((message, i) => (
-            <li
-              key={i}
-              className={`message-item ${
-                message.ownedByCurrentUser ? "sent-message" : "received-message"
-              }`}
-            >
-              {message.body}
-            </li>
-          ))*/}
-          {chatState.chats.map((chatDetail, i) => (
-            <p key={chatDetail.timestamp} className={`${chatDetail.senderUid === chatState.currentUser.uid ? "sent-message" : "received-message"}`}>{chatDetail.content}</p>
+          {chatState.chats.map((chatDetail) => (
+            <li key={chatDetail.timestamp} className={`${chatDetail.senderUid === chatState.currentUser.uid ? "sent-message" : "received-message"}`}>{chatDetail.content}</li>
           ))}
         </ol>
         <form onSubmit={handleSubmit(handleSendMessage)}>

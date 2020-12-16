@@ -1,9 +1,9 @@
-import {auth} from "../services/firebase"
+import {auth, db} from "../services/firebase"
 import log from "loglevel"
 
 export function signup(userName, setErrorCb) {
-  const email = `${userName}`
-  const password = "Pass123$@chatapp.com"
+  const email = `${userName}@chatapp.com`
+  const password = "Pass123$"
   return auth().createUserWithEmailAndPassword(email, password)
     .then(() => {
       const user = auth().currentUser
@@ -16,6 +16,14 @@ export function signup(userName, setErrorCb) {
         .catch((err) => {
           log.warn(err)
         })
+      try {
+        db.ref("users").push({
+          displayName: userName,
+          timestamp: Date.now(),
+        })
+      } catch(err) {
+        log.warn(err)
+      }
     })
     .catch((error) => {
       const {code, message} = error
@@ -27,7 +35,6 @@ export function signup(userName, setErrorCb) {
 export function login(userName, setErrorCb) {
   const email = `${userName}@chatapp.com`
   const password = "Pass123$"
-  // return auth().signInAnonymously()
   return auth().signInWithEmailAndPassword(email, password)
     .then(() => {
       localStorage.setItem('chatUserName', userName)

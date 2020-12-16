@@ -1,29 +1,21 @@
 import React, {useState} from "react"
 import {useForm} from "react-hook-form"
-import log from "loglevel"
 import {login, signup} from "../helpers/auth"
 
 const ChatSetup = () => {
-  // const [userName, setUserName] = useState("")
   const [auth, setAuth] = useState(false)
   const {register, handleSubmit, getValues, reset, errors} = useForm()
   const [error, setError] = useState(null)
   const userAuthStatus = auth ? "Register" : "Login"
 
   const authorizeUser = async() => {
-    // try {
-      const {username} = getValues()
-      if (auth) {
-        await signup(username, setError)
-      } else {
-        await login(username, setError)
-      }
-      // setUserName(username)
-      reset()
-    // } catch(error) {
-    //   setError(error.message)
-    //   log.warn(error)
-    // }
+    const {username} = getValues()
+    if (auth) {
+      await signup(username, setError)
+    } else {
+      await login(username, setError)
+    }
+    reset()
   };
 
   return (
