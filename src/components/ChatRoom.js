@@ -37,7 +37,6 @@ const ChatRoom = () => {
         snapshot.forEach((snap) => {
           users.push(snap.val())
         })
-        // console.log(users)
         setChatState((prevState) => ({...chatState, users}))
       })
     } catch (error) {
