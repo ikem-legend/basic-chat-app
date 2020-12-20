@@ -1,6 +1,6 @@
-import React from "react"
-import ChatRoom from "../components/ChatRoom"
-import Navbar from "../components/Navbar"
+import React from 'react'
+import ChatRoom from '../components/ChatRoom'
+import Navbar from '../components/Navbar'
 
 const PeerChat = ({authenticated, history}) => {
   return (
