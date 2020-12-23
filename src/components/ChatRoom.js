@@ -43,9 +43,9 @@ const ChatRoom = () => {
       setChatState((prevState) => ({...chatState, readError: error.message}))
     }
   }, [chatState])
-  // useEffect(() => {
-  //   initialiseChatList()
-  // }, [initialiseChatList])
+  useEffect(() => {
+    initialiseChatList()
+  }, [initialiseChatList])
   useEffect(() => {
     initialiseUserList()
   }, [initialiseUserList])
