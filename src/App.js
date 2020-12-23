@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import {Router, Switch, Route} from 'react-router-dom'
+import {ToastContainer} from 'react-toastify'
 import log from 'loglevel'
 import history from './helpers/navigation'
 import {auth} from './services/firebase'
 import './index.css'
+import 'react-toastify/dist/ReactToastify.css'
 import Home from './pages/Home'
 import PeerChat from './pages/PeerChat'
 import GeneralChat from './pages/GeneralChat'
@@ -31,6 +33,7 @@ function App() {
   }, [])
   return (
     <Router history={history}>
+      <ToastContainer hideProgressBar={true} />
       <Switch>
         <PublicRoute
           exact
