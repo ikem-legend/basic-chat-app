@@ -30,6 +30,7 @@ function App() {
         localStorage.removeItem('chatUserName')
       }
     })
+    return localStorage.removeItem('chatUserName')
   }, [])
   return (
     <Router history={history}>
